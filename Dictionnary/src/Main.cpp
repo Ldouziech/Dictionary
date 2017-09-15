@@ -1,11 +1,15 @@
 #include <iostream>
+#include "Dictionary.h"
 
 using namespace std;
 
 int main()
 {
-	cout << "Hello World!" << endl;
-	cin.get();
+	Dictionary	dict;
+	dict.load();
 
+	//cout << dict << endl;
+
+	cin.get();
 	return 0;
 }
