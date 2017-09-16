@@ -260,3 +260,5 @@ paket-files/
 __pycache__/
 *.pyc
 /Dictionnary/res/liste_francais.txt
+/Dictionnary/res/DefaultDict.txt
+/Dictionnary/res/UTF8.txt
