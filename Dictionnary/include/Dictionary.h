@@ -14,12 +14,15 @@
 #include <exception>
 #include <iostream>
 
-using DictValuePair = std::vector<std::list<std::string>>;
-using Dict = std::map<char, DictValuePair>;
-using AccentSet = std::unordered_set<unsigned char>;
-
 #define MIN_SIZE	2
 #define MAX_SIZE	25
+#define E_IN_O		0x9c
+#define WHITESPACES	" \t\n\v\f\r"
+
+using DictValue = std::vector<std::list<std::string>>;
+using Dict = std::map<char, DictValue>;
+using AccentSet = std::unordered_set<unsigned char>;
+
 
 class Dictionary
 {
@@ -46,11 +49,16 @@ public:
 	const unsigned int&	getMaxSize() const;
 	const unsigned int	getSize() const;
 
+
 private:
-	void	strip(std::string& str);
-	bool	isValid(const std::string& line);
-	void	formatLine(std::string& line);
-	void	addWord(const std::string& word);
+	void		strip(std::string& str);
+	void		trim(std::string& str);
+	bool		isValid(const std::string& line);
+	void		formatLine(std::string& line);
+	void		addWord(const std::string& word);
+	void		uniqueWord();
+
+	static bool	isspace(const unsigned char& c);
 };
 
 std::ostream&	operator<<(std::ostream& os, const Dictionary& dict);
