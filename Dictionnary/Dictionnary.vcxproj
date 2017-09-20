@@ -135,10 +135,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Dictionary.cpp" />
+    <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\Resolver.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Dictionary.h" />
+    <ClInclude Include="include\Game.h" />
+    <ClInclude Include="include\Resolver.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

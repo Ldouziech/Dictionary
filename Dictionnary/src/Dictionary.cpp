@@ -77,6 +77,13 @@ void Dictionary::formatLine(string& line)
 			it++;
 			continue;
 		}
+		if (c == E_IN_A)
+		{
+			line.replace(it, it + 1, "ae");
+			it++;
+			continue;
+		}
+
 		for (const auto& kv : Dictionary::Accents)
 		{
 			if (kv.second.find(c) != kv.second.end())

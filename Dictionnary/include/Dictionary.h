@@ -17,6 +17,7 @@
 #define MIN_SIZE	2
 #define MAX_SIZE	25
 #define E_IN_O		0x9c
+#define E_IN_A		0xe6
 #define WHITESPACES	" \t\n\v\f\r"
 
 using DictValue = std::vector<std::list<std::string>>;
@@ -26,6 +27,8 @@ using AccentSet = std::unordered_set<unsigned char>;
 
 class Dictionary
 {
+	friend class Resolver;
+
 	std::string		m_dictPath;
 	Dict			m_Dict;
 	unsigned int	m_MinSize;
