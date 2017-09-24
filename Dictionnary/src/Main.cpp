@@ -1,16 +1,13 @@
 #include <iostream>
-#include "Dictionary.h"
+
+#include "Game.h"
 
 using namespace std;
 
 int main()
 {
-	Dictionary	dict;
-	//dict.load();
-	dict.load();
+	Game	game;
+	game.run();
 
-	//cout << dict << endl;
-
-	cin.get();
 	return 0;
 }

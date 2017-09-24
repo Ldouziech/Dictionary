@@ -27,26 +27,6 @@ void Dictionary::setMaxSize(const unsigned int& size)
 	m_MaxSize = (size > MAX_SIZE ? MAX_SIZE : size);
 }
 
-bool Dictionary::isspace(const unsigned char& c)
-{
-	for (const auto& v : WHITESPACES)
-		if (c == v)
-			return true;
-	return false;
-}
-
-void Dictionary::strip(string& str)
-{
-	str.erase(remove_if(str.begin(), str.end(), Dictionary::isspace), str.end());
-}
-
-void Dictionary::trim(string& str)
-{
-	str.erase(str.begin(), find_if_not(str.begin(), str.end(), Dictionary::isspace));
-
-	str.erase(find_if_not(str.rbegin(), str.rend(), Dictionary::isspace).base(), str.end());
-}
-
 bool Dictionary::isValid(const string& line)
 {
 	if (line.empty() ||
@@ -59,13 +39,14 @@ bool Dictionary::isValid(const string& line)
 
 void Dictionary::formatLine(string& line)
 {
-	this->trim(line);
+	Utils::trim(line);
+	unsigned char c;
 
 	for (auto& it = line.begin(); it != line.end(); ++it)
 	{
-		unsigned char c = static_cast<unsigned char>(*it);
+		c = static_cast<unsigned char>(*it);
 
-		if (Dictionary::isspace(c))
+		if (Utils::isspace(c))
 		{
 			line.clear();
 			return;
@@ -93,7 +74,7 @@ void Dictionary::formatLine(string& line)
 			}
 		}
 	}
-	this->strip(line);
+	Utils::strip(line);
 }
 
 void Dictionary::addWord(const string& word)
@@ -156,6 +137,11 @@ const unsigned int& Dictionary::getMaxSize() const
 const unsigned int Dictionary::getSize() const
 {
 	return m_MaxSize - m_MinSize;
+}
+
+const DictValue& Dictionary::operator[](char key)
+{
+	return m_Dict.at(key);
 }
 
 ostream& operator<<(ostream& os, const Dictionary& dict)

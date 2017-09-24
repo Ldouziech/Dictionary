@@ -4,11 +4,15 @@
 
 class Resolver
 {
-	const Dictionary&	m_dict;
+	Dictionary&	m_RefDict;
 
 public:
-	explicit Resolver(const Dictionary& dict);
+	explicit Resolver(Dictionary& dict);
 	~Resolver();
 
-	void	resolve();
+	void	resolveLetters(const std::string& input, bool full);
+	void	resolveNumbers(const std::string& input);
+
+private:
+	bool	match(std::string pA, const std::string& ref);
 };
