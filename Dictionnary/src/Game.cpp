@@ -50,7 +50,7 @@ void Game::resolveNumbers()
 bool Game::isInputValid(const string& input)
 {
 	if (input.size() < m_Dictionary.getMinSize() ||
-		input.size() > m_Dictionary.getMaxSize() ||
+		input.size() > MAX_INPUT ||
 		input.find_first_not_of(Dictionary::Ref) != input.npos)
 		return false;
 	return true;

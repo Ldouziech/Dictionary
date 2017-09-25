@@ -139,9 +139,11 @@ const unsigned int Dictionary::getSize() const
 	return m_MaxSize - m_MinSize;
 }
 
-const DictValue& Dictionary::operator[](char key)
+const WordList& Dictionary::get(const char& key, const unsigned int& pos) const
 {
-	return m_Dict.at(key);
+	if (pos < m_MinSize || Dictionary::Ref.find(key) == string::npos)
+		return WordList();
+	return m_Dict.at(key).at(pos - m_MinSize);
 }
 
 ostream& operator<<(ostream& os, const Dictionary& dict)

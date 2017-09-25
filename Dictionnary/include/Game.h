@@ -3,6 +3,8 @@
 #include "Resolver.h"
 #include "Utils\Utils.h"
 
+#define MAX_INPUT	100
+
 class Game
 {
 	Dictionary	m_Dictionary;

@@ -9,5 +9,6 @@ int main()
 	Game	game;
 	game.run();
 
+	//cin.get();
 	return 0;
 }

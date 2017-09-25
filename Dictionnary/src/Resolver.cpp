@@ -9,11 +9,6 @@ Resolver::Resolver(Dictionary& dict) :
 Resolver::~Resolver()
 {}
 
-/*
-	toSearch = "caca"
-	pA = [opiace]
-*/
-
 bool Resolver::match(string pA, const string& ref)
 {
 	size_t	pos;
@@ -31,20 +26,21 @@ bool Resolver::match(string pA, const string& ref)
 void Resolver::resolveLetters(const string& input, bool full)
 {
 	unordered_set<char>	alreadySeen{};
-	size_t	count(0), curSize = input.size();
+	size_t	count(0);
+	size_t	sizeSearch = min(input.size(), m_RefDict.getMaxSize());
 	bool	stop = false;
 
 	cout << "Start searching: " << input << endl;
 	cout << string(25, '-') << endl;
 
-	while (curSize-- > m_RefDict.getMinSize())
+	while (sizeSearch >= m_RefDict.getMinSize())
 	{
-		for (const char& startSearch : input)
+		for (const char& keySearch : input)
 		{
-			if (alreadySeen.find(startSearch) != alreadySeen.end())
+			if (alreadySeen.find(keySearch) != alreadySeen.end())
 				continue;
 
-			for (const string& word : m_RefDict[startSearch].at(curSize))
+			for (const string& word : m_RefDict.get(keySearch, sizeSearch))
 			{
 				if (this->match(input, word))
 				{
@@ -54,14 +50,15 @@ void Resolver::resolveLetters(const string& input, bool full)
 						stop = true;
 				}
 			}
-			alreadySeen.emplace(startSearch);
+			alreadySeen.emplace(keySearch);
 		}
-		alreadySeen.clear();
 		if (!full && stop)
 			break;
+		alreadySeen.clear();
+		--sizeSearch;
 	}
 
-	cout << count << " words found !!!" << endl;
+	cout << count << " words found with: " << input << endl;
 }
 
 void Resolver::resolveNumbers(const string& input)

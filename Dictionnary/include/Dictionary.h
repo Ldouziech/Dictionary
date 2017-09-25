@@ -21,7 +21,8 @@
 #define E_IN_O		0x9c
 #define E_IN_A		0xe6
 
-using DictValue = std::vector<std::list<std::string>>;
+using WordList = std::list<std::string>;
+using DictValue = std::vector<WordList>;
 using Dict = std::map<char, DictValue>;
 using AccentSet = std::unordered_set<unsigned char>;
 
@@ -55,7 +56,7 @@ public:
 	const unsigned int&	getMaxSize() const;
 	const unsigned int	getSize() const;
 
-	const DictValue&	operator[](char key);
+	const WordList&		get(const char& key, const unsigned int& pos) const;
 
 private:
 	bool		isValid(const std::string& line);
