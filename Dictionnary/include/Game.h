@@ -26,8 +26,12 @@ public:
 	void	run();
 
 private:
-	Mode	chooseMode();
-	void	resolveNumbers();
-	bool	isInputValid(const std::string& input);
-	void	resolveLetters();
+	void		resolveNumbers();
+
+	std::string	getInput();
+	void		addWord();
+	Mode		chooseMode();
+	bool		isOkay();
+	bool		isInputValid(const std::string& input);
+	void		resolveLetters();
 };

@@ -2,6 +2,15 @@
 
 namespace Utils
 {
+	void	clearConsole()
+	{
+	#ifdef _WIN32
+		std::system("cls");
+	#else
+		std::system("clear");
+	#endif
+	}
+
 	bool	isspace(const unsigned char& c)
 	{
 		for (const auto& v : WHITESPACES)

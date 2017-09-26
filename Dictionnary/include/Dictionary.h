@@ -46,6 +46,7 @@ public:
 	Dictionary operator=(const Dictionary&) = delete;
 	~Dictionary();
 
+	void				addWord(const std::string& word);
 	void				load(const std::string& dictPath = "");
 
 	void				setMinSize(const unsigned int& size);
@@ -55,13 +56,13 @@ public:
 	const unsigned int&	getMinSize() const;
 	const unsigned int&	getMaxSize() const;
 	const unsigned int	getSize() const;
-
-	const WordList&		get(const char& key, const unsigned int& pos) const;
+	const WordList&		getConst(const char& key, const unsigned int& pos) const;
+	WordList&			getRef(const char& key, const unsigned int& pos);
 
 private:
 	bool		isValid(const std::string& line);
 	void		formatLine(std::string& line);
-	void		addWord(const std::string& word);
+	void		addWordToDict(const std::string& word);
 	void		uniqueWord();
 };
 

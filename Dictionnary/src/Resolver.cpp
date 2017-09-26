@@ -30,6 +30,7 @@ void Resolver::resolveLetters(const string& input, bool full)
 	size_t	sizeSearch = min(input.size(), m_RefDict.getMaxSize());
 	bool	stop = false;
 
+	Utils::clearConsole();
 	cout << "Start searching: " << input << endl;
 	cout << string(25, '-') << endl;
 
@@ -40,7 +41,7 @@ void Resolver::resolveLetters(const string& input, bool full)
 			if (alreadySeen.find(keySearch) != alreadySeen.end())
 				continue;
 
-			for (const string& word : m_RefDict.get(keySearch, sizeSearch))
+			for (const string& word : m_RefDict.getConst(keySearch, sizeSearch))
 			{
 				if (this->match(input, word))
 				{
@@ -59,6 +60,7 @@ void Resolver::resolveLetters(const string& input, bool full)
 	}
 
 	cout << count << " words found with: " << input << endl;
+	cout << string(25, '-') << endl;
 }
 
 void Resolver::resolveNumbers(const string& input)

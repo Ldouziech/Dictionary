@@ -13,17 +13,41 @@ Game::Game() :
 Game::~Game()
 {}
 
+void Game::resolveNumbers()
+{
+	m_Resolver.resolveNumbers("");
+}
+
+string Game::getInput()
+{
+	string input("");
+	getline(cin, input);
+	Utils::strip(input);
+	return input;
+}
+
+void Game::addWord()
+{
+	cout << "Quel mot voulez-vous ajouter ?" << endl;
+
+	string word(this->getInput());
+
+	if (this->isInputValid(word))
+		m_Dictionary.addWord(word);
+}
+
 Game::Mode Game::chooseMode()
 {
 	Mode choice(INVALID);
-	string input("");
 
+	Utils::clearConsole();
 	cout << "Voulez-vous jouez avec des chiffres ou des lettres ?" << endl;
 	cout << "CHIFFRES - 1" << endl;
 	cout << "LETTRES  - 2" << endl;
 	cout << "QUITTER  - 3" << endl;
 
-	getline(cin, input);
+	string input(this->getInput());
+
 	if (!input.empty())
 		switch (input.front())
 		{
@@ -42,9 +66,13 @@ Game::Mode Game::chooseMode()
 	return choice;
 }
 
-void Game::resolveNumbers()
+bool Game::isOkay()
 {
-	m_Resolver.resolveNumbers("");
+	string input(this->getInput());
+	if (input.empty() ||
+		input.front() != 'o')
+		return false;
+	return true;
 }
 
 bool Game::isInputValid(const string& input)
@@ -52,7 +80,10 @@ bool Game::isInputValid(const string& input)
 	if (input.size() < m_Dictionary.getMinSize() ||
 		input.size() > MAX_INPUT ||
 		input.find_first_not_of(Dictionary::Ref) != input.npos)
+	{
+		cout << "Bad Input !!!" << endl;
 		return false;
+	}
 	return true;
 }
 
@@ -61,33 +92,22 @@ void Game::resolveLetters()
 	cout << "Avec quelles lettres voulez-vous trouver un mot ?" << endl;
 	cout << "Les lettres valides sont: [" << Dictionary::Ref << "]" << endl;
 
-	string input("");
-	getline(cin, input);
-	Utils::strip(input);
+	string input(this->getInput());
 	if (!this->isInputValid(input))
-	{
-		cout << "Entree invalide !!!" << endl;
 		return;
-	}
 
 	cout << "Voulez-vous afficher tous les mots possibles ou seulement les plus long ? [o/n]" << endl;
 
-	string full("");
-	getline(cin, full);
-	Utils::strip(full);
-	if (full.empty() ||
-		full.find_first_of("on") != 0)
-	{
-		cout << "Entree invalide !!!" << endl;
-		return;
-	}
-	m_Resolver.resolveLetters(input, (full.front() == 'o' ? true : false));
+	m_Resolver.resolveLetters(input, this->isOkay());
+
+	cout << "Voulez-vous ajouter un mot au dictionnaire ? [o/n]" << endl;
+
+	if (this->isOkay())
+		this->addWord();
 }
 
 void Game::run()
 {
-	cout << "Bienvenue dans des chiffres et des lettres!" << endl;
-
 	while (m_IsRunning)
 	{
 		switch (this->chooseMode())
@@ -102,10 +122,9 @@ void Game::run()
 				m_IsRunning = false;
 				break;
 			default:
-				cout << "Veuillez chosir un mode de jeu valide !!!" << endl;
+				cout << "Veuillez choisir un mode de jeu valide !!!" << endl;
 				break;
 		}
-		cout << string(25, '-') << endl;
 	}
 
 	cout << "Merci d'avoir joue a des chiffres et des lettres ! A bientot !!!" << endl;

@@ -17,6 +17,32 @@ Dictionary::Dictionary(const string& dictPath, unsigned int minSize, unsigned in
 Dictionary::~Dictionary()
 {}
 
+const WordList& Dictionary::getConst(const char& key, const unsigned int& pos) const
+{
+	if (pos < m_MinSize || Dictionary::Ref.find(key) == string::npos)
+		return WordList();
+	return m_Dict.at(key).at(pos - m_MinSize);
+}
+
+WordList& Dictionary::getRef(const char& key, const unsigned int& pos)
+{
+	return m_Dict.at(key).at(pos - m_MinSize);
+}
+
+void Dictionary::addWord(const string& word)
+{
+	for (const string& w : this->getConst(word.front(), word.size()))
+		if (word == w)
+			return;
+	this->getRef(word.front(), word.size()).emplace_back(word);
+
+	ofstream file(Dictionary::ResFolder + m_dictPath, ofstream::out | ofstream::app);
+
+	file << endl << word;
+
+	file.close();
+}
+
 void Dictionary::setMinSize(const unsigned int& size)
 {
 	m_MinSize = (size < MIN_SIZE ? MIN_SIZE : size);
@@ -77,7 +103,7 @@ void Dictionary::formatLine(string& line)
 	Utils::strip(line);
 }
 
-void Dictionary::addWord(const string& word)
+void Dictionary::addWordToDict(const string& word)
 {
 	m_Dict.at(word.front()).at(word.size() - m_MinSize).emplace_back(word);
 }
@@ -111,7 +137,7 @@ void Dictionary::load(const string& dictPath)
 		this->formatLine(line);
 
 		if (this->isValid(line))
-			this->addWord(line);
+			this->addWordToDict(line);
 	}
 	file.close();
 	this->uniqueWord();
@@ -137,13 +163,6 @@ const unsigned int& Dictionary::getMaxSize() const
 const unsigned int Dictionary::getSize() const
 {
 	return m_MaxSize - m_MinSize;
-}
-
-const WordList& Dictionary::get(const char& key, const unsigned int& pos) const
-{
-	if (pos < m_MinSize || Dictionary::Ref.find(key) == string::npos)
-		return WordList();
-	return m_Dict.at(key).at(pos - m_MinSize);
 }
 
 ostream& operator<<(ostream& os, const Dictionary& dict)
