@@ -30,6 +30,7 @@ private:
 
 	std::string	getInput();
 	void		addWord();
+	void		deleteWord();
 	Mode		chooseMode();
 	bool		isOkay();
 	bool		isInputValid(const std::string& input);

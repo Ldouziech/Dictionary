@@ -36,6 +36,16 @@ void Game::addWord()
 		m_Dictionary.addWord(word);
 }
 
+void Game::deleteWord()
+{
+	cout << "Quel mot voulez-vous supprimer ?" << endl;
+
+	string word(this->getInput());
+
+	if (this->isInputValid(word))
+		m_Dictionary.deleteWord(word);
+}
+
 Game::Mode Game::chooseMode()
 {
 	Mode choice(INVALID);
@@ -80,10 +90,7 @@ bool Game::isInputValid(const string& input)
 	if (input.size() < m_Dictionary.getMinSize() ||
 		input.size() > MAX_INPUT ||
 		input.find_first_not_of(Dictionary::Ref) != input.npos)
-	{
-		cout << "Bad Input !!!" << endl;
 		return false;
-	}
 	return true;
 }
 
@@ -104,6 +111,11 @@ void Game::resolveLetters()
 
 	if (this->isOkay())
 		this->addWord();
+
+	cout << "Voulez-vous supprimer un mot du dictionnaire ? [o/n]" << endl;
+
+	if (this->isOkay())
+		this->deleteWord();
 }
 
 void Game::run()
@@ -126,6 +138,4 @@ void Game::run()
 				break;
 		}
 	}
-
-	cout << "Merci d'avoir joue a des chiffres et des lettres ! A bientot !!!" << endl;
 }

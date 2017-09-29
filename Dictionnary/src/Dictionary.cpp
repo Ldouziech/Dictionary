@@ -3,7 +3,7 @@
 using namespace std;
 
 Dictionary::Dictionary(const string& dictPath, unsigned int minSize, unsigned int maxSize) :
-	m_dictPath(dictPath),
+	m_dictFileName(dictPath),
 	m_Dict()
 {
 	setMinSize(minSize);
@@ -36,11 +36,44 @@ void Dictionary::addWord(const string& word)
 			return;
 	this->getRef(word.front(), word.size()).emplace_back(word);
 
-	ofstream file(Dictionary::ResFolder + m_dictPath, ofstream::out | ofstream::app);
+	ofstream file(Dictionary::ResFolder + m_dictFileName, ofstream::out | ofstream::app);
 
-	file << endl << word;
+	file << word << endl;
 
 	file.close();
+}
+
+void Dictionary::deleteWord(const string& word)
+{
+	WordList& lst = this->getRef(word.front(), word.size());
+	size_t prevSize = lst.size();
+
+	lst.remove(word);
+	if (prevSize == lst.size())
+		return;
+
+	string path(Dictionary::ResFolder + m_dictFileName);
+	string tmpPath(Dictionary::ResFolder + "_tmp.txt");
+
+	ifstream file(path);
+	ofstream output(tmpPath, ofstream::out | ofstream::trunc);
+
+	if (file.is_open() && output.is_open())
+	{
+		string line;
+		while (file.good())
+		{
+			getline(file, line);
+			if (line != word)
+				output << line << endl;
+		}
+
+		file.close();
+		output.close();
+
+		remove(path.c_str());
+		rename(tmpPath.c_str(), path.c_str());
+	}
 }
 
 void Dictionary::setMinSize(const unsigned int& size)
@@ -121,12 +154,20 @@ void Dictionary::uniqueWord()
 void Dictionary::load(const string& dictPath)
 {
 	if (!dictPath.empty())
-		m_dictPath = dictPath;
-	string path = (Dictionary::ResFolder + m_dictPath);
+		m_dictFileName = dictPath;
+	string path = (Dictionary::ResFolder + m_dictFileName);
+	string tmpPath = (Dictionary::ResFolder + "_tmp.txt");
 
 	ifstream file(path);
 	if (!file.is_open())
-		throw invalid_argument("Dictionary: cannot open file: " + path);
+		throw invalid_argument("[Dictionary] Cannot open file: " + path);
+
+	ofstream tmpFile(tmpPath, ofstream::out | ofstream::trunc);
+	if (!tmpFile.is_open())
+	{
+		file.close();
+		throw invalid_argument("[Dictionary] Cannot open file: " + tmpPath);
+	}
 
 	cout << "Loading dictionary from file: " << path << endl;
 
@@ -137,9 +178,17 @@ void Dictionary::load(const string& dictPath)
 		this->formatLine(line);
 
 		if (this->isValid(line))
+		{
 			this->addWordToDict(line);
+			tmpFile << line << endl;
+		}
 	}
 	file.close();
+	tmpFile.close();
+
+	remove(path.c_str());
+	rename(tmpPath.c_str(), path.c_str());
+
 	this->uniqueWord();
 
 	cout << "Dictionary loaded! Ready to use!" << endl;

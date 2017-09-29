@@ -9,6 +9,7 @@
 #include <utility>
 #include <algorithm>
 #include <fstream>
+#include <cstdio>
 #include <unordered_set>
 
 #include <exception>
@@ -29,7 +30,7 @@ using AccentSet = std::unordered_set<unsigned char>;
 
 class Dictionary
 {
-	std::string		m_dictPath;
+	std::string		m_dictFileName;
 	Dict			m_Dict;
 	unsigned int	m_MinSize;
 	unsigned int	m_MaxSize;
@@ -47,6 +48,7 @@ public:
 	~Dictionary();
 
 	void				addWord(const std::string& word);
+	void				deleteWord(const std::string& word);
 	void				load(const std::string& dictPath = "");
 
 	void				setMinSize(const unsigned int& size);
